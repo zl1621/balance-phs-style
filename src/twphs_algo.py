@@ -42,30 +42,6 @@ def phs_get_c(n, n_fb, b_prec=fp.BIT_PREC_DEFAULT):
     return (RealField(b_prec)(n)**RealField(b_prec)(3/2))/RealField(b_prec)(n_fb);
 
 
-def my_phs_get_c(n, fb, b_prec=fp.BIT_PREC_DEFAULT):
-    _n = RealField(b_prec)(n);
-    _s_fb = sum(ln(RealField(b_prec)(_p.norm())) for _p in fb);
-    max_fb=0;
-    for i in range(len(fb)):
-        if (RealField(b_prec)(ln(fb[i].norm()))>max_fb):
-            max_fb=RealField(b_prec)(ln(fb[i].norm()));
-    return RealField(b_prec)(2*_n**1.5*max_fb/_s_fb);
-    #return RealField(b_prec)(n**1.5/n_fb);
-
-
-
-
-def my_phs0_get_c(n, fb, b_prec=fp.BIT_PREC_DEFAULT):
-    _n = RealField(b_prec)(n);
-    _s_fb = sum(ln(RealField(b_prec)(_p.norm())) for _p in fb);
-    max_fb=0;
-    for i in range(len(fb)):
-        if (RealField(b_prec)(ln(fb[i].norm()))>max_fb):
-            max_fb=RealField(b_prec)(ln(fb[i].norm()));
-    return RealField(b_prec)(4*_n*max_fb*n**1.5/_s_fb);
-    #return RealField(b_prec)(n**2.5/n_fb);
-
-
 # Opt-PHS scaling
 # But isometry induces a gap of 1+ln(n), not sqrt(n)
 def opt_get_c(n, fb, b_prec=fp.BIT_PREC_DEFAULT):
@@ -74,46 +50,14 @@ def opt_get_c(n, fb, b_prec=fp.BIT_PREC_DEFAULT):
     return RealField(b_prec)(max(1, (1+ln(_n))*_n/_s_fb)); # Almost always 1.
 
 
-def my_opt_get_c(n, fb, b_prec=fp.BIT_PREC_DEFAULT):
-    _n = RealField(b_prec)(n);
-    max_fb=0;
-    for i in range(len(fb)):
-        if (RealField(b_prec)(ln(fb[i].norm()))>max_fb):
-            max_fb=RealField(b_prec)(ln(fb[i].norm()));
-    _s_fb = sum(ln(RealField(b_prec)(_p.norm())) for _p in fb);
-    return RealField(b_prec)(max(1, (1+ln(_n))*_n/len(fb)));
-    #print("c is",RealField(b_prec)(max(1, (1+ln(_n))*_n/_s_fb)));
-    #return RealField(b_prec)(max(1, (1+ln(_n))*_n*max_fb/_s_fb));
-
-
-def my_opt0_get_c(n, fb, b_prec=fp.BIT_PREC_DEFAULT):
-    _n = RealField(b_prec)(n);
-    max_fb=0;
-    for i in range(len(fb)):
-        if (RealField(b_prec)(ln(fb[i].norm()))>max_fb):
-            max_fb=RealField(b_prec)(ln(fb[i].norm()));
-    _s_fb = sum(ln(RealField(b_prec)(_p.norm())) for _p in fb);
-    _sum_k=RealField(b_prec)(_s_fb/len(fb));
-    
-    return RealField(b_prec)(max(1, n*max_fb*(1+ln(_n))*_n/_s_fb));
-    #return RealField(b_prec)(max(1, 4*_n*(1+ln(_n))*_n*max_fb**2/_s_fb));
 
 # Dispatch function Tw-/Opt-/- PHS for scaling.
 def twphs_get_c(n, fb, method, b_prec=fp.BIT_PREC_DEFAULT):
     assert (method in __METHOD_TYPE);
     if (method == 'PHS'): 
         return phs_get_c(n, len(fb), b_prec=b_prec);
-    if (method == 'MYPHS'): 
-        return my_phs_get_c(n, fb, b_prec=b_prec);
-    if (method == 'MYPHS0'): 
-        return my_phs0_get_c(n, fb, b_prec=b_prec);
     if (method == 'OPT'):
         return opt_get_c(n, fb, b_prec=b_prec);
-
-    if (method=='MYOPT'):
-        return my_opt_get_c(n,fb,b_prec=b_prec);
-    if (method == 'MYOPT0'):
-        return my_opt0_get_c(n,fb,b_prec=b_prec);
     if (method == 'TW') or (method == 'NONE') or (method=='MYTW'): 
         return RealField(b_prec)(1);
 
@@ -388,7 +332,7 @@ def myphs_get_twfHcE_matrix(r1, r2, fb, b_prec=fp.BIT_PREC_DEFAULT):
     _k  = len(fb);
     _sum_n=RealField(b_prec)(_sum/_n**1.5);
     
-    # Always project on H or H0
+    # project
     _span_H = _n;
     _pH     = get_projection_H(_n+_k, _span_H, b_prec=b_prec);
     assert (fp.fp_check_zero("PrH(1)", (vector([1]*(_span_H)+[0]*(_n+_k-_span_H))*_pH).coefficients(), target=b_prec));
@@ -433,7 +377,7 @@ def myphs0_get_twfHcE_matrix(r1, r2, fb, b_prec=fp.BIT_PREC_DEFAULT):
     _k  = len(fb);
     _sum_n=RealField(b_prec)(_sum/_n**1.5);
     
-    # Always project on H or H0
+    # project
     _span_H = _n;
     _pH     = get_projection_H(_n+_k, _span_H, b_prec=b_prec);
     assert (fp.fp_check_zero("PrH(1)", (vector([1]*(_span_H)+[0]*(_n+_k-_span_H))*_pH).coefficients(), target=b_prec));
@@ -477,7 +421,7 @@ def myopt_get_twfHcE_matrix(r1, r2, fb, b_prec=fp.BIT_PREC_DEFAULT):
     _k  = len(fb);
     _sum_n=RealField(b_prec)(_sum/((1+ln(_n))*_n));
     
-    # Always project on H or H0
+    # project
     _span_H = _n;
     _pH     = get_projection_H(_n+_k, _span_H, b_prec=b_prec);
     assert (fp.fp_check_zero("PrH(1)", (vector([1]*(_span_H)+[0]*(_n+_k-_span_H))*_pH).coefficients(), target=b_prec));
@@ -523,7 +467,7 @@ def myopt0_get_twfHcE_matrix(r1, r2, fb, b_prec=fp.BIT_PREC_DEFAULT):
     _k  = len(fb);
     _sum_n=RealField(b_prec)(_sum/((1+ln(_n))*_n));
     
-    # Always project on H or H0
+    # project 
     _span_H = _n;
     _pH     = get_projection_H(_n+_k, _span_H, b_prec=b_prec);
     assert (fp.fp_check_zero("PrH(1)", (vector([1]*(_span_H)+[0]*(_n+_k-_span_H))*_pH).coefficients(), target=b_prec));
