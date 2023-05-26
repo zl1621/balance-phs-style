@@ -2,8 +2,8 @@ Codes for our work based on "Twisted-PHS: Using the Product Formula to Solve App
 
 Major Changes in:
 
-twphs_algo.py: add some functions
-
+twphs_algo.py: add some functions mytws/phs/phs0/opt/opt_get_twfHcE_matrix to realize the construction of lattices in CVPP problem in correlation improved algorithm.
+lattice.py: add functions my_get_minkH, my_get_projection_H to implement the improvements we made to tw-phs
 
 
 -------------------------------------------------------------------------------------------------
