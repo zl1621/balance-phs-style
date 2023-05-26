@@ -1,4 +1,11 @@
-"Twisted-PHS: Using the Product Formula to Solve Approx-SVP in Ideal Lattices"
+Codes for our work based on "Twisted-PHS: Using the Product Formula to Solve Approx-SVP in Ideal Lattices", which is a open source at "https://github.com/ob3rnard/Twisted-PHS". 
+
+Major Changes in:
+
+twphs_algo.py: add some functions
+
+
+
 -------------------------------------------------------------------------------------------------
 
 1. Library requirements
