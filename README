@@ -1,5 +1,6 @@
 Codes for our work based on "Twisted-PHS: Using the Product Formula to Solve Approx-SVP in Ideal Lattices", which is a open source at "https://github.com/ob3rnard/Twisted-PHS". 
-codes related with the follwoing keywords:
+
+The code has the following keywords, which are all parts of the new functions we have constructed:
 myphs: our improvement of PHS algorithm using the factor base in [PHS19]
 myphs0:our improvement of PHS algorithm using the factor base in [BR20]
 myopt: our improvement of OPT-PHS algorithm using the factor base in [PHS19]
@@ -7,12 +8,22 @@ myopt0:our improvement of PHS algorithm using the factor base in [BR20]
 mytw: our improvement of TW-PHS algorithm using the factor base in [BR20]
 
 Major Changes in:
-
 twphs_algo.py: add some functions mytws/phs/phs0/opt/opt_get_twfHcE_matrix to realize the construction of lattices in CVPP problem in correlation improved algorithm. Modify the twphs_guess_beta function relevant 
 with the target vector for CVPP problem in each algorithm.
 lattice.py: add functions my_get_minkH, my_get_projection_H to implement the improvements we made to tw-phs.
+We have added cldl.sage and sunits.sage to the scripts folder to replace cldl.magma, sunits magma. 
+-------------------------------------------------------------------------------------------------
+
+Since our code is based on the work of [BR20], we simply made modifications in a few relevant files. For instructions on running the entire code, please refer to [BR20]'s readme file. We list below
 
 
+-------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------
+
+"Twisted-PHS: Using the Product Formula to Solve Approx-SVP in Ideal Lattices"
 -------------------------------------------------------------------------------------------------
 
 1. Library requirements
